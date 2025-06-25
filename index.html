@@ -141,7 +141,7 @@
         subtractBtn.className = "btn";
         subtractBtn.textContent = "-1";
         subtractBtn.onclick = () => {
-          score.textContent = Math.max(0, parseInt(score.textContent) - 1);
+          score.textContent = parseInt(score.textContent) - 1;
         };
 
         controls.appendChild(addBtn);
