@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Dynamic Team Scoreboard</title>
+    <style>
+      * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+        font-family: "Segoe UI", sans-serif;
+      }
+
+      body,
+      html {
+        height: 100%;
+        width: 100%;
+        overflow: hidden;
+      }
+
+      #app {
+        display: flex;
+        height: 100vh;
+        width: 100vw;
+      }
+
+      .team {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        transition: all 0.3s ease;
+        padding: 20px;
+        color: white;
+        position: relative;
+      }
+
+      .team:nth-child(1) {
+        background: linear-gradient(135deg, #f12711, #f5af19);
+      }
+      .team:nth-child(2) {
+        background: linear-gradient(135deg, #36d1dc, #5b86e5);
+      }
+      .team:nth-child(3) {
+        background: linear-gradient(135deg, #c31432, #240b36);
+      }
+      .team:nth-child(4) {
+        background: linear-gradient(135deg, #12c2e9, #c471ed, #f64f59);
+      }
+
+      .team h2 {
+        font-size: 2rem;
+        margin-bottom: 10px;
+      }
+
+      .score {
+        font-size: 4rem;
+        font-weight: bold;
+        margin-bottom: 20px;
+      }
+
+      .controls {
+        display: flex;
+        gap: 10px;
+      }
+
+      .btn {
+        background-color: rgba(255, 255, 255, 0.2);
+        border: none;
+        padding: 15px 20px;
+        border-radius: 12px;
+        font-size: 1.5rem;
+        color: white;
+        cursor: pointer;
+        transition: all 0.2s ease;
+      }
+
+      .btn:hover {
+        background-color: rgba(255, 255, 255, 0.4);
+        transform: scale(1.1);
+      }
+
+      #team-count-selector {
+        position: absolute;
+        top: 10px;
+        left: 50%;
+        transform: translateX(-50%);
+        background: #ffffffdd;
+        padding: 10px 20px;
+        border-radius: 12px;
+        z-index: 1000;
+      }
+
+      #team-count-selector select {
+        padding: 5px 10px;
+        font-size: 16px;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="team-count-selector">
+      <label for="teamCount">Select number of teams: </label>
+      <select id="teamCount">
+        <option value="2">2 Teams</option>
+        <option value="3">3 Teams</option>
+        <option value="4">4 Teams</option>
+      </select>
+    </div>
+
+    <div id="app"></div>
+
+    <script>
+      const app = document.getElementById("app");
+      const teamCountSelector = document.getElementById("teamCount");
+
+      function createTeam(index) {
+        const teamDiv = document.createElement("div");
+        teamDiv.className = "team";
+        teamDiv.id = `team-${index}`;
+
+        const teamName = document.createElement("h2");
+        teamName.textContent = `Team ${index + 1}`;
+
+        const score = document.createElement("div");
+        score.className = "score";
+        score.textContent = "0";
+
+        const controls = document.createElement("div");
+        controls.className = "controls";
+
+        const addBtn = document.createElement("button");
+        addBtn.className = "btn";
+        addBtn.textContent = "+1";
+        addBtn.onclick = () => {
+          score.textContent = parseInt(score.textContent) + 1;
+        };
+
+        const subtractBtn = document.createElement("button");
+        subtractBtn.className = "btn";
+        subtractBtn.textContent = "-1";
+        subtractBtn.onclick = () => {
+          score.textContent = Math.max(0, parseInt(score.textContent) - 1);
+        };
+
+        controls.appendChild(addBtn);
+        controls.appendChild(subtractBtn);
+
+        teamDiv.appendChild(teamName);
+        teamDiv.appendChild(score);
+        teamDiv.appendChild(controls);
+
+        return teamDiv;
+      }
+
+      function renderTeams(count) {
+        app.innerHTML = "";
+        for (let i = 0; i < count; i++) {
+          app.appendChild(createTeam(i));
+        }
+      }
+
+      teamCountSelector.addEventListener("change", () => {
+        const count = parseInt(teamCountSelector.value);
+        renderTeams(count);
+      });
+
+      // Initial render with 2 teams
+      renderTeams(2);
+    </script>
+  </body>
+</html>
